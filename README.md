@@ -27,8 +27,11 @@ framework to learn, no dependency to install and no build step to run.
 | An HTTP client | any | `curl -i http://localhost:3000/hello` once the server is running; a browser address bar also works |
 
 Node.js 22.0.0 is the floor this project declares in `package.json` as `"node": ">=22.0.0"`, so
-`node -v` printing `v22.0.0` or anything newer means every command in this tutorial works as
-written.
+`node -v` printing `v22.0.0` or anything newer means the runtime clears that floor and the
+commands below behave as described. It says nothing about your shell: they are written for the
+macOS and Linux shell. In Windows PowerShell `curl` is an alias for `Invoke-WebRequest`, which has
+none of the flags used below, so write `curl.exe` there to call the real client — step 5 shows the
+one-line status check both ways, step 10 the Windows form of the `PORT` override.
 
 ## 3. Install
 
@@ -124,6 +127,15 @@ It prints:
 ```text
 200
 ```
+
+The form above is the macOS and Linux shell. On Windows PowerShell, where `curl` is the
+`Invoke-WebRequest` alias, name `curl.exe` and send the body to `NUL` instead of `/dev/null`:
+
+```powershell
+curl.exe -s -o NUL -w '%{http_code}\n' http://localhost:3000/hello
+```
+
+It prints `200` the same way.
 
 ## 6. What just happened
 
