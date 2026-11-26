@@ -2,7 +2,7 @@
   "name": "nodejs-hello-tutorial",
   "version": "1.0.0",
   "private": true,
-  "description": "A minimal Node.js tutorial: one HTTP endpoint, GET /hello, answering Hello world.",
+  "description": "A Node.js tutorial: GET /hello answers Hello world.",
   "type": "module",
   "engines": {
     "node": ">=22.0.0"
