@@ -13,8 +13,12 @@ import { createServer } from 'node:http';
 export function createApp() {
   return createServer((req, res) => {
     // req.url holds the request-target ('/hello?name=world'), so only its
-    // pathname is compared.
-    const { pathname } = new URL(req.url, 'http://localhost');
+    // pathname is compared. A target the URL parser rejects, such as the
+    // 'GET //' request line, has no pathname to match, so it falls to the 404
+    // row like any other unknown path.
+    const pathname = URL.canParse(req.url, 'http://localhost')
+      ? new URL(req.url, 'http://localhost').pathname
+      : undefined;
 
     if (pathname !== '/hello') {
       sendText(res, 404, 'Not Found');

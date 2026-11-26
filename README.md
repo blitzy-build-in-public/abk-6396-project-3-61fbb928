@@ -1,8 +1,9 @@
 # Node.js Hello world tutorial
 
 One HTTP server, one endpoint, one response. This tutorial builds it with Node.js and nothing
-else, shows the exact output of every command, and then explains the two source files that make
-it work.
+else, shows what to expect from each command — the exact text it prints where that text is fixed
+and the pattern to look for where it varies by machine, as the Node.js and npm version checks do —
+and then explains the two source files that make it work.
 
 ## 1. What you will build
 
@@ -37,6 +38,16 @@ From the repository root — the directory that holds `package.json` — run:
 npm install
 ```
 
+```text
+
+up to date, audited 1 package in 142ms
+
+found 0 vulnerabilities
+```
+
+npm prints that summary itself. The elapsed time and any audit wording vary by npm version and by
+what is already in your cache; `up to date` is the line that tells you nothing was fetched.
+
 It downloads nothing. `package.json` declares no dependencies and no dev dependencies, so npm has
 no package to fetch and no `node_modules/` to create. That is the point rather than an omission:
 the lesson is what Node.js itself does with an HTTP request, and a dependency tree would be
@@ -58,8 +69,10 @@ Listening on http://localhost:3000
 ```
 
 That line means the server is listening on port 3000 of the loopback interface, `127.0.0.1`, so
-only your own machine can reach it. This terminal now belongs to the server: leave it running and
-open a second terminal for the next step.
+only your own machine can reach it. If `http://localhost:3000/hello` does not answer, use
+`http://127.0.0.1:3000/hello` instead: that is the interface the server binds, and on some hosts
+`localhost` resolves to the IPv6 address `::1` first, which this server does not listen on. This
+terminal now belongs to the server: leave it running and open a second terminal for the next step.
 
 ## 5. Call the endpoint
 
@@ -93,6 +106,9 @@ header order is not significant, so those are the only lines you may see differ.
 the status line, the two headers and the body — is exactly what the server sends.
 `Content-Length: 11` is the length of `Hello world` in bytes, and the server sets it explicitly so
 the response is framed by its length rather than as a stream whose end the client must wait for.
+`charset=utf-8` is stated explicitly because `text/plain` assumes US-ASCII by default, which would
+mis-decode the UTF-8 bytes Node.js writes; naming the charset tells the client how the body is
+encoded.
 
 The same request in a browser: open `http://localhost:3000/hello` in the address bar and the page
 shows `Hello world` as plain text.
@@ -168,8 +184,8 @@ method, so a wrong method on a path that does not exist is a 404, and the match 
 
 ## 9. Run the tests
 
-Stop the server first with `Ctrl+C`, so the suite's own server and the one you were calling are
-never confused for each other. Then:
+Stop the server first with `Ctrl+C`: that frees port 3000 for the next `npm start` and leaves the
+terminal it was running in at a plain prompt. Then:
 
 ```bash
 npm test
