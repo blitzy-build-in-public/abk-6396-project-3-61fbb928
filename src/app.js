@@ -3,14 +3,17 @@ import { createServer } from 'node:http';
 /**
  * Builds the HTTP application and returns its server without starting it.
  *
- * The returned server is not listening: the caller owns listen() and close(), so a
- * test can run the real routing table on a free port rather than the tutorial's.
+ * The returned server is not listening: the caller owns listen() and close(),
+ * so a test can run the real routing table on a free port rather than the
+ * tutorial's.
  *
- * @returns {import('node:http').Server} a configured server that has not been started
+ * @returns {import('node:http').Server} a configured server that has not been
+ * started
  */
 export function createApp() {
   return createServer((req, res) => {
-    // req.url holds the request-target ('/hello?name=world'), so only its pathname is compared.
+    // req.url holds the request-target ('/hello?name=world'), so only its
+    // pathname is compared.
     const { pathname } = new URL(req.url, 'http://localhost');
 
     if (pathname !== '/hello') {
@@ -23,13 +26,15 @@ export function createApp() {
   });
 }
 
-// sendText(res, statusCode, body, extraHeaders): sets the plain-text headers and
-// status on res, then ends the response with body.
+// sendText(res, statusCode, body, extraHeaders): sets the plain-text headers
+// and status on res, then ends the response with body.
 function sendText(res, statusCode, body, extraHeaders = {}) {
-  // text/plain assumes US-ASCII, so the UTF-8 body needs its charset stated explicitly.
+  // text/plain assumes US-ASCII, so the UTF-8 body needs its charset stated
+  // explicitly.
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
 
-  // Sending the byte length frames the response by length instead of as a chunked stream.
+  // Sending the byte length frames the response by length instead of as a
+  // chunked stream.
   res.setHeader('Content-Length', Buffer.byteLength(body));
 
   for (const [name, value] of Object.entries(extraHeaders)) {
@@ -38,6 +43,7 @@ function sendText(res, statusCode, body, extraHeaders = {}) {
 
   res.statusCode = statusCode;
 
-  // end() sends the status line and headers if unsent, then the body, completing the response.
+  // end() sends the status line and headers if unsent, then the body,
+  // completing the response.
   res.end(body);
 }
