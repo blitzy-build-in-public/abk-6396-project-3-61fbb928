@@ -4,10 +4,11 @@ import { createApp } from './app.js';
 // it is unset.
 const port = Number(process.env.PORT ?? 3000);
 
-// listen() rejects a port it cannot use by throwing before any 'error' event
-// is emitted, so a PORT that is not a whole number in range is refused here
-// with the readable message and exit code 1 the listener below cannot supply.
-// Port 0 stays accepted: it asks the operating system to pick a free port.
+// listen() refuses a PORT that is not a valid port number by throwing before
+// any 'error' event is emitted, so a PORT that is not a whole number in range
+// is refused here with the readable message and exit code 1 the listener
+// below cannot supply. Port 0 stays accepted: it asks the operating system
+// to pick a free port.
 if (!Number.isInteger(port) || port < 0 || port > 65535) {
   console.error(
     'PORT must be a whole number between 0 and 65535. ' +
@@ -37,8 +38,8 @@ server.on('error', (error) => {
 });
 
 server.on('listening', () => {
-  // A port of 0 asks the operating system to pick one, so the line names the
-  // port the socket bound rather than the configured value.
+  // When PORT was 0 the socket was given a different port, so the line logs
+  // the one it actually bound.
   console.log(`Listening on http://localhost:${server.address().port}`);
 });
 

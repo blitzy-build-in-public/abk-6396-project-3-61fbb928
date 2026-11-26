@@ -13,9 +13,11 @@ import { createServer } from 'node:http';
 export function createApp() {
   return createServer((req, res) => {
     // req.url holds the request-target ('/hello?name=world'), so only its
-    // pathname is compared. A target the URL parser rejects, such as the
+    // pathname is compared. The 'http://localhost' argument is only a base,
+    // needed because parsing a relative request-target requires one, and its
+    // host is never used. A target the URL parser rejects, such as the
     // 'GET //' request line, has no pathname to match, so it falls to the 404
-    // row like any other unknown path.
+    // branch like any other unknown path.
     const pathname = URL.canParse(req.url, 'http://localhost')
       ? new URL(req.url, 'http://localhost').pathname
       : undefined;
